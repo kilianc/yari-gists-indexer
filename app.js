@@ -14,7 +14,7 @@ var tpl = Handlebars.compile(readFileSync('./etc/index.md.tpl', 'utf8'))
 console.log(' > Fetching gists for user "' + userId + '"...')
 
 getFilteredGists(userId, filter, function (err, gists) {
-  if (!err) console.log(' > Gists fetched successfully')
+  if (!err) console.log(' > Gists fetched successfully (' + gists.length + ')')
   else return console.error(' ! Something went wrong: ', err)
 
   gists = gists.map(function (gist) {
