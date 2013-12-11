@@ -7,11 +7,15 @@ consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
 proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-## Links
-{{#gists}}
- * [{{description}}](https://gist.github.com/{{../user}}/{{id}})
-  * {{#filenames}}{{.}}{{/filenames}}
-{{/gists}}
+## Categories
+{{#each gists}}
+ * {{category}}:
+  {{~#each this}}
+  {{~#each this.filenames}}
+    * [{{this}}](https://gist.github.com/{{../../../user}}/{{../id}})
+  {{~/each}}
+  {{~/each}}
+{{/each}}
 
 ## License
 

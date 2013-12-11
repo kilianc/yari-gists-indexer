@@ -8,21 +8,42 @@ var gistId = process.argv.pop()
 var authToken = process.argv.pop()
 var userId = process.argv.pop()
 
-var filter = /^\[.+\]/
+var filter = /^\[(.+)\]/
 var tpl = Handlebars.compile(readFileSync('./etc/index.md.tpl', 'utf8'))
 
 console.log(' > Fetching gists for user "' + userId + '"...')
 
-getFilteredGists(userId, filter, function (err, gists) {
+getFilteredGists(userId, authToken, filter, function (err, gists) {
   if (!err) console.log(' > Gists fetched successfully (' + gists.length + ')')
   else return console.error(' ! Something went wrong: ', err)
 
-  gists = gists.map(function (gist) {
-    return {
+  var categories = {}
+
+  gists.forEach(function (gist) {
+    gist.description = gist.description || Object.keys(gist.files)[0]
+    gist.description = gist.description.replace(/(\r\n)+/g, ' ')
+
+    var reducedGist = {
       filenames: Object.keys(gist.files),
-      description: gist.description || Object.keys(gist.files)[0],
+      description: gist.description,
       id: gist.id
     }
+
+    Object.keys(gist.files).forEach(function (filename) {
+      var match = filename.match(filter)
+      if (!match) return
+      var category = match[1]
+      if (undefined === categories[category]) {
+        categories[category] = [reducedGist]
+      } else {
+        categories[category].push(reducedGist)
+      }
+    })
+  })
+
+  var categoriesSorted = {}
+  Object.keys(categories).sort().forEach(function (category) {
+    categoriesSorted[category] = categories[category]
   })
 
   console.log(' > Compiling gist...')
@@ -30,7 +51,7 @@ getFilteredGists(userId, filter, function (err, gists) {
   var gistContent = tpl({
     user: userId,
     updatedAt: new Date(),
-    gists: gists
+    gists: categoriesSorted
   })
 
   console.log(' > Saving gist...')
