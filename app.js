@@ -4,13 +4,19 @@ var readFileSync = require('fs').readFileSync,
     getFilteredGists = require('./lib/get_filtered_gists'),
     updateGist = require('./lib/update_gist')
 
-var userId = 'ariok'
-var authToken = 'cbc68457bf406a1042b870d4b2777e520fee029c'
-var gistId = '7908416'
+var gistId = process.argv.pop()    //'7908416'
+var authToken = process.argv.pop() //'cbc68457bf406a1042b870d4b2777e520fee029c'
+var userId = process.argv.pop()    //'ariok'
+
 var filter = /^\[.+\]/
 var tpl = Handlebars.compile(readFileSync('./etc/index.md.tpl', 'utf8'))
 
+console.log(' > Fetching gists for user "' + userId + '"...')
+
 getFilteredGists(userId, filter, function (err, gists) {
+  if (!err) console.log(' > Gists fetched successfully')
+  else return console.error(' ! Something went wrong: ', err)
+
   gists = gists.map(function (gist) {
     return {
       filenames: Object.keys(gist.files),
@@ -18,6 +24,8 @@ getFilteredGists(userId, filter, function (err, gists) {
       id: gist.id
     }
   })
+
+  console.log(' > Compiling gist...')
 
   var gistContent = tpl({
     user: userId,
@@ -27,9 +35,10 @@ getFilteredGists(userId, filter, function (err, gists) {
     gists: gists
   })
 
-  console.log(gistContent)
+  console.log(' > Saving gist...')
 
   updateGist('kilianc', authToken, gistId, gistContent, function (err, res) {
-    console.log(err, res)
+    if (!err) console.log(' > Gist file saved at https://gist.github.com/' + userId + '/' + gistId)
+    else console.error(' ! Something went wrong: ', err)
   })
 })

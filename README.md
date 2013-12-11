@@ -2,7 +2,8 @@
 ## Creates a gist index based on a title pattern and save it into a gist
 
 ## Usage
-    $ cd yari-gists-indexer -g
+    $ cd yari-gists-indexer
+    $ npm install
     $ node app ariok [auth_token] [dest_gist_id]
 
 ## Templating
