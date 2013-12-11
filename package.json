@@ -1,0 +1,15 @@
+{
+  "author": "Kilian Ciuffolo <me@nailik.org> (http://nailik.org)",
+  "name": "yari-gists-indexer",
+  "description": "Creates a gist index based on a title pattern and save it into a gist",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/kilianc/yari-gist-indexer.git"
+  },
+  "dependencies": {
+    "request": "~2.29.0",
+    "handlebar": "",
+    "handlebars": "~1.1.2"
+  }
+}
