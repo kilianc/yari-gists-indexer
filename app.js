@@ -37,7 +37,7 @@ getFilteredGists(userId, filter, function (err, gists) {
 
   console.log(' > Saving gist...')
 
-  updateGist('kilianc', authToken, gistId, gistContent, function (err, res) {
+  updateGist(userId, authToken, gistId, gistContent, function (err, res) {
     if (!err) console.log(' > Gist file saved at https://gist.github.com/' + userId + '/' + gistId)
     else console.error(' ! Something went wrong: ', err)
   })
