@@ -4,9 +4,9 @@ var readFileSync = require('fs').readFileSync,
     getFilteredGists = require('./lib/get_filtered_gists'),
     updateGist = require('./lib/update_gist')
 
-var gistId = process.argv.pop()    //'7908416'
-var authToken = process.argv.pop() //'cbc68457bf406a1042b870d4b2777e520fee029c'
-var userId = process.argv.pop()    //'ariok'
+var gistId = process.argv.pop()
+var authToken = process.argv.pop()
+var userId = process.argv.pop()
 
 var filter = /^\[.+\]/
 var tpl = Handlebars.compile(readFileSync('./etc/index.md.tpl', 'utf8'))
@@ -29,8 +29,6 @@ getFilteredGists(userId, filter, function (err, gists) {
 
   var gistContent = tpl({
     user: userId,
-    author: 'Yari',
-    email: 'info@yari.com',
     updatedAt: new Date(),
     gists: gists
   })
